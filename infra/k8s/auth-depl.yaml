@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-depl
+spec:
+  replicas: 1  #this depl manage 1 pod
+  selector:
+    matchLabels:
+      app: auth
+  template: #template to specify each pod
+    metadata:
+      labels:
+        app: auth #match vs label o selector
+    spec:
+      containers:
+        - name: auth
+          image: ktang285/auth #docker image created from Dockerfile
+  
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: auth-srv
+spec: #default type to be clusterIP service
+  selector: 
+    app: auth #select all deployment with this label
+  ports:
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
