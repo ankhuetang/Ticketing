@@ -28,6 +28,17 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+}, {
+    toJSON: {
+        //tranform ret (the document) before returning it (built in method)
+        transform(doc, ret) {
+            ret.id = ret._id;
+            delete ret.password;
+            delete ret.__v;
+            delete ret._id;
+
+        }
+    }
 });
 
 //middleware to hash the password before saving
