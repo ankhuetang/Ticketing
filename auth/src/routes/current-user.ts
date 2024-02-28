@@ -1,22 +1,13 @@
 import express from 'express'
-import jwt from 'jsonwebtoken';
+import { requireAuth } from '../middlewares/require-auth';
 
+import { currentUser } from '../middlewares/current-user-middleware';
 const router = express.Router()
 
 //this route to answer if a user is loggedin or not
-router.get('/api/users/currentuser', (req, res) => {
-    if (!req.session || !req.session.jwt) {
-        return res.send({currentUser: null});
-    }
-
-    try {
-        const payload = jwt.verify(req.session.jwt, process.env.JWT_KEY!);
-        res.send({currentUser: payload});
-    } catch(err) {
-        res.send({currentUser: null});
-    }
-
-    
+router.get('/api/users/currentuser', currentUser, requireAuth, (req, res) => {
+   //after the currentUser middleware set req.currentUser = payload in cookie
+    res.send({currentUser: req.currentUser || null})
 })
 
 export {router as currentuserRouter};
