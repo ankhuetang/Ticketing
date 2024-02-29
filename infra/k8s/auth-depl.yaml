@@ -15,6 +15,12 @@ spec:
       containers:
         - name: auth
           image: ktang285/auth #docker image created from Dockerfile
+          env: 
+            - name: JWT_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_KEY
   
 ---
 apiVersion: v1
