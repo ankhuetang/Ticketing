@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1  #this depl manage 1 pod
+  selector:
+    matchLabels: #label so the deployment know which pod to manage
+      app: client
+  template: #template to specify each pod
+    metadata:
+      labels:
+        app: client #match vs label o selector
+    spec:
+      containers:
+        - name: client #for logging purpose
+          image: ktang285/client #docker image created from Dockerfile
+  
+---
+apiVersion: v1
+kind: Service 
+metadata:
+  name: client-srv
+spec: #default type to be clusterIP service
+  selector: 
+    app: client #select all deployment with this label
+  ports:
+    - name: client
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
